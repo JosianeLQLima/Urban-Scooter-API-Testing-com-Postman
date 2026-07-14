@@ -1,80 +1,103 @@
-# Bug Report
+# Caso de Teste 032 – Validação do campo `password` contendo caracteres especiais
 
-## Título
+## Objetivo
 
-**POST /api/v1/courier - Está sendo possível criar entregador com `password` contendo caracteres especiais na requisição**
-
-## Descrição do Bug
-
-O bug ocorre no endpoint **POST /api/v1/courier** da API do Urban Scooter. Ao enviar uma requisição para criar um entregador com o campo **`password`** contendo caracteres especiais, a API permite a criação da conta, mesmo que a regra de negócio determine que a senha deve conter apenas dígitos numéricos.
+Verificar se a API impede a criação de um entregador quando o campo **`password`** contém caracteres especiais.
 
 ---
 
-## Ambiente
+## Informações do Teste
 
-* **Aplicação:** Urban Scooter API
-* **Ferramenta:** Postman
-* **Método HTTP:** `POST`
-* **Endpoint:** `/api/v1/courier`
-* **Content-Type:** `application/json`
+| Campo             | Valor                  |
+| ----------------- | ---------------------- |
+| **ID**            | CT-032                 |
+| **Endpoint**      | `POST /api/v1/courier` |
+| **Método HTTP**   | `POST`                 |
+| **Ferramenta**    | Postman                |
+| **Tipo de Teste** | Teste Negativo         |
+| **Status**        | ❌ Reprovado            |
 
 ---
 
-## Passos para Reproduzir
+## Pré-condições
 
-### Requisição JSON
+* A API Urban Scooter deve estar disponível.
+* O endpoint **`POST /api/v1/courier`** deve estar acessível.
+
+---
+
+## Dados de Teste
+
+### Corpo da Requisição
 
 ```json
 {
-  "login": "Carlos",
-  "firstName": "Pedro",
-  "password": "12#4"
+    "login": "Carlos",
+    "firstName": "Pedro",
+    "password": "12#4"
 }
 ```
 
-### cURL
+---
 
-```bash
-curl --location 'https://cnt-bd423384-768f-4532-a8f2-d3c6cf270d18.containerhub.tripleten-services.com/api/v1/courier' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "login":"Carlos",
-    "firstName":"Pedro",
-    "password":"12#4"
-}'
+## Passos para Execução
+
+1. Abrir o Postman.
+2. Criar uma requisição **POST** para o endpoint **`/api/v1/courier`**.
+3. Adicionar o cabeçalho:
+
+```text
+Content-Type: application/json
 ```
+
+4. Enviar o corpo da requisição.
+5. Verificar o código de status e o corpo da resposta.
 
 ---
 
 ## Resultado Esperado
 
-A API deve validar o campo **`password`** e rejeitar valores que contenham caracteres especiais.
+A API deve rejeitar a criação do entregador quando o campo **`password`** contém caracteres especiais.
 
-**Status Code:** `400 Bad Request`
+**Status esperado:**
+
+```text
+400 Bad Request
+```
+
+**Resposta esperada:**
 
 ```json
 {
-  "message": "Não há dados suficientes para criar uma conta"
+    "message": "Não há dados suficientes para criar uma conta"
 }
 ```
 
 ---
 
-## Resultado Atual
+## Resultado Obtido
 
-A API aceita a criação do entregador com o campo **`password`** contendo caracteres especiais, retornando **201 Created** e cadastrando a conta, mesmo que o valor informado (`12#4`) não atenda à regra de negócio.
+A API aceitou a criação do entregador com o campo **`password`** contendo caracteres especiais, retornando:
+
+```text
+201 Created
+```
+
+O usuário foi cadastrado com sucesso, mesmo utilizando a senha **"12#4"**, que não atende à regra de negócio.
 
 ---
 
-## Severidade
+## Resultado do Teste
 
-**Alta** – Permite o cadastro de usuários com dados que violam as regras de validação da aplicação.
+**❌ REPROVADO**
 
-## Prioridade
+A API não valida corretamente o campo **`password`**, permitindo caracteres especiais em um campo que deveria aceitar apenas dígitos numéricos.
 
-**Alta**
+---
 
-## Evidência
+## Evidências
 
-* Captura de tela da resposta no Postman.
-* Coleção do Postman contendo a requisição.
+* Resposta da API no Postman.
+* Código HTTP retornado: **201 Created**.
+* Payload utilizado durante a execução do teste.
+
