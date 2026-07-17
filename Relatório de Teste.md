@@ -1,3 +1,6 @@
+# Segue abaixo um dos casos de teste do Relatório 
+https://docs.google.com/spreadsheets/d/1oHjO43Qp60uOUcRW6bft5uX5g8yCFF98A_3R34qlpw4/edit?gid=46614568#gid=46614568
+---
 # Caso de Teste 032 – Validação do campo `password` contendo caracteres especiais
 
 ## Objetivo
